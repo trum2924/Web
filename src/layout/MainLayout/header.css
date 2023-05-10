@@ -1,0 +1,92 @@
+.login-dialog {
+  width: 30vw;
+  height: 60vh;
+}
+
+.content-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+.btn-login {
+  padding: 0 15px;
+}
+.login-logo {
+  width: 150px;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.login-suggest {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 15px;
+  margin-top: 15px;
+}
+.login-suggest span {
+  padding-right: 15px;
+}
+
+.detail-account {
+  background-color: #fff;
+  position: absolute;
+  right: -10px;
+  z-index: 10;
+  color: #6c727c;
+  text-align: left;
+  cursor: default;
+  border-radius: 10px;
+  transition: all 0.3s;
+  opacity: 0;
+  visibility: hidden;
+  padding: 20px;
+  width: 190px;
+  border: none;
+}
+
+.detail-item {
+  font-weight: 400;
+  font-size: 15px;
+}
+.detail-item svg {
+  margin-right: 15px;
+}
+.user-fullname {
+  cursor: pointer;
+  position: relative;
+}
+.user-fullname:hover .detail-account {
+  visibility: unset;
+  opacity: 100;
+}
+.logo img {
+  width: 100px;
+}
+
+.back-button {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  top: 20%;
+  right: 0;
+  cursor: pointer;
+}
+.category-bottom {
+  background-color: black;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  margin: 0 5px 10px 5px;
+  width: fit-content;
+  height: fit-content;
+}
+.footer-cate {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  align-content: flex-start;
+}
+.user-action{
+  width: 35px;
+  float: right;
+}
