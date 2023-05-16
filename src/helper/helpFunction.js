@@ -1,7 +1,7 @@
 import moment from "moment/moment";
 
 const getImgUrl = (img) => {
-  return "https://be-production-9000.up.railway.app:8090" + img;
+  return "http://localhost:8090" + img;
 };
 
 const isAdmin = (user) => {
@@ -44,6 +44,11 @@ const getColorStatus = (status) => {
         color: "#3CCF4E",
         state: "Thành công",
       };
+    case 512:
+      return {
+        color: "#ea8654",
+        state: "Hết hạn",
+      };
     default:
       return {
         color: "green",
@@ -51,6 +56,32 @@ const getColorStatus = (status) => {
       };
   }
 };
+
+const getBookStatus = (status, bookInfo) => {
+  if(status === 0){
+    return {
+      color: "#857e7b",
+      state: "Trong kho"
+    };
+  }else if(status === 512){
+    return {
+      color: "#ea8654",
+      state: "Hết hạn",
+    };
+  }else{
+    if(bookInfo.length === 0){
+      return {
+        color: "#F0EB8D",
+        state: "Đang sử dụng",
+      };
+    }else{
+      return {
+        color: "green",
+        state: "Đã thuê",
+      };
+    }
+  }
+}
 
 const convertToDay = (input) => {
   const day = new Date(input);
@@ -123,4 +154,5 @@ export {
   removeTones,
   formatMoney,
   compareDate,
+  getBookStatus
 };
