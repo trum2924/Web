@@ -220,15 +220,9 @@ export default function AddPost() {
   };
   const listAddress = [
     "Chọn địa chỉ",
-    "102 P. Phạm Ngọc Thạch, Kim Liên, Đống Đa, Hà Nội",
-    "119 Đ. Trần Duy Hưng, Trung Hoà, Cầu Giấy, Hà Nội",
-    "Số 458 Minh Khai, Q. Hai Bà Trưng, Hà Nội",
-    "191 Bà Triệu, Lê Đại Hành, Hoàn Kiếm, Hà Nội",
-    "72 Nguyễn Trãi, Thượng Đình, Thanh Xuân, Hà Nội",
-    "72A Nguyễn Trãi, Thượng Đình, Thanh Xuân, Hà Nội",
-    "04A Trần Duy Hưng, Trung Hoà, Cầu Giấy, Hà Nội",
-    "458 P. Minh Khai, Vĩnh Phú, Hai Bà Trưng, Hà Nội",
-    "85 Đ. Lê Văn Lương, Nhân Chính, Thanh Xuân, Hà Nội",
+    "04 Tô Ngọc Vân, P. Linh Tây, Q. Thủ Đức, TP.HCM",
+    "138 Lê Văn Việt, P. Hiệp Phú, Q.9, TP.HCM",
+    "Số 190 Quang Trung, Phường 10, Quận Gò Vấp, TP.HCM",
   ];
 
   const handleSearch = (e) => {
