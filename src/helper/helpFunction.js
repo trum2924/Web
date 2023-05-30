@@ -1,7 +1,7 @@
 import moment from "moment/moment";
 
 const getImgUrl = (img) => {
-  return "https://be-production-9000.up.railway.app" + img;
+  return "http://localhost:8090" + img;
 };
 
 const isAdmin = (user) => {

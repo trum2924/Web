@@ -18,7 +18,10 @@ const schema = yup.object({
     .oneOf([yup.ref("password"), null], "Phải trùng với mật khẩu")
     .required("Xác nhận mật khẩu không được để trống"),
   firstName: yup.string().required("Tên không được để trống"),
-  email: yup.string().required("Email không được để trống")
+  email: yup
+    .string()
+    .email("Email không hợp lệ")
+    .required("Email không được để trống"),
 });
 
 export default function Register() {
@@ -34,7 +37,7 @@ export default function Register() {
 
   const resetInput = (inputArray) => {
     inputArray.forEach(field => {
-      resetField(field);
+        resetField(field);
     });
   }
 
@@ -46,16 +49,23 @@ export default function Register() {
         id: username,
         firstName,
         lastName,
-        email,
         password,
+        email,
       })
       .then((response) => {
-        const { message } = response.data;
+        const {message} = response.data;
         NotificationManager.success(message, "Thông báo", 1000);
-        resetInput(["firstName", "lastName", "username", "password", "cfpassword", "email"]);
+        resetInput([
+          "firstName",
+          "lastName",
+          "username",
+          "password",
+          "cfpassword",
+          "email"
+        ]);
       })
       .catch((err) => {
-        const { message } = err.response.data;
+        const {message} = err.response.data;
         NotificationManager.error(message, "Thông báo", 1000);
       });
   };
@@ -119,22 +129,6 @@ export default function Register() {
                     <TextField
                       autoFocus
                       margin="dense"
-                      label="Tên đăng nhập"
-                      type="text"
-                      fullWidth
-                      variant="standard"
-                      {...register("username")}
-                    />
-                  </div>
-                  {errors.username && (
-                    <span className="error-message" role="alert">
-                      {errors.username?.message}
-                    </span>
-                  )}
-                  <div className="content-row">
-                    <TextField
-                      autoFocus
-                      margin="dense"
                       label="Email"
                       type="text"
                       fullWidth
@@ -145,6 +139,22 @@ export default function Register() {
                   {errors.email && (
                     <span className="error-message" role="alert">
                       {errors.email?.message}
+                    </span>
+                  )}
+                  <div className="content-row">
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      label="Tên đăng nhập"
+                      type="text"
+                      fullWidth
+                      variant="standard"
+                      {...register("username")}
+                    />
+                  </div>
+                  {errors.username && (
+                    <span className="error-message" role="alert">
+                      {errors.username?.message}
                     </span>
                   )}
                   <div className="content-row">
@@ -187,7 +197,7 @@ export default function Register() {
                 </div>
                 <div className="login-suggest">
                   <span>Bạn đã có tài khoản?</span>{" "}
-                  <Link to={"/login"} style={{ textDecoration: "underline", color: "#0d6efd" }}>Đăng nhập ngay</Link>
+                  <Link to={"/login"} style={{textDecoration: "underline", color: "#0d6efd" }}>Đăng nhập ngay</Link>
                 </div>
               </div>
             </div>

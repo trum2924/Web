@@ -6,30 +6,30 @@ export default function ManagementSidebar() {
   const manageLinks = [
     {
       value: "/user/category",
-      text: "Quản lí thể loại",
+      text: "Quản lý thể loại",
     },
     {
       value: "/user/order-status",
-      text: "Quản lí đơn hàng",
+      text: "Quản lý đơn hàng",
     },
     {
       value: "/user/post-request",
-      text: "Quản lí yêu cầu ký gửi",
+      text: "Quản lý yêu cầu ký gửi",
     },
     {
       value: "/user/book-management",
-      text: "Quản lí sách",
+      text: "Quản lý sách",
     },
   ];
   const adminManageLinks = [
     {
       value: "/user/user-management",
-      text: "Quản lí người dùng",
+      text: "Quản lý người dùng",
     },
     {
       value: "/user/charge",
-      text: "Quản lí nạp tiền",
-    },
+      text: "Quản lý nạp tiền",
+    }
   ];
 
   const userLinks = [
@@ -52,7 +52,7 @@ export default function ManagementSidebar() {
   return (
     <div className="sidebar pb-45px position-sticky top-70 mt-2 pt-30px">
       <h5 className="text-center">{user.lastName + " " + user.firstName}</h5>
-      <h6 className="text-center">{user.roles[0] === "ROLE_ADMIN" ? "admin" : user.roles[0] === "ROLE_MANAGER_POST" ? "quản lý" : "người dùng"}</h6>
+      <h6 className="text-center">{user.roles[0] === "ROLE_ADMIN" ? "admin" : user.roles[0] === "ROLE_MANAGER_POST" ? "quản lý" : "khách hàng"}</h6>
       <ul className="generic-list-item generic-list-item-highlight fs-15" style={{marginTop: "15px"}}>
         {user.roles[0] === "ROLE_ADMIN"
           ? adminManageLinks.map((link) => {

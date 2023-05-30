@@ -2,9 +2,9 @@ import axios from "axios";
 
 const token = window.localStorage.getItem("token");
 //console.log(token);
-const testPort = "https://be-production-9000.up.railway.app";
+const testPort = "http://192.168.137.206:8090";
 const axiosIntance = axios.create({
-  baseURL: "https://be-production-9000.up.railway.app/api/",
+  baseURL: "http://localhost:8090/api/",
   headers: {
     Authorization: token ? `Bearer ${token}` : "",
   },

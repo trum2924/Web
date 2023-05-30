@@ -21,12 +21,12 @@ import { getConfig } from "../../apis/user";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { getBooks, getUserBooks } from "../../apis/book";
+import { getStoreAsync } from "../../apis/store";
+import Loading from "../../components/Loading/Loading";
 
 const schema = yup.object({});
 
 export default function AddPost() {
-
-
   const [listSelectBook, setListSelectBook] = useState([]);
   const [listToChooseBook, setListToChooseBook] = useState([]);
   const [listChoosenBook, setListChoosenBook] = useState([]);
@@ -39,8 +39,11 @@ export default function AddPost() {
   const [configs, setConfigs] = useState(0);
   const [address, setAddress] = useState("Chọn địa chỉ");
   const [numDay, setNumDay] = useState(1);
+  const [listAddress, setListAddress] = useState(["Chọn địa chỉ"]);
 
   const dispatch = useDispatch();
+
+  let check = 0;
   useEffect(() => {
     //role ? dispatch(getBooks()) : dispatch(getUserBooks());
     const fetchBooks = async () => {
@@ -71,14 +74,30 @@ export default function AddPost() {
       setListSelectBook(tempList);
       setListToChooseBook(tempList);
     };
+    const fetchAddress = async () => {
+      const { data } = await getStoreAsync();
+      // data.value && setListAddress(prev => [...prev, ...data.value.stores.map((val, index) => {
+      //   return {index, text: val}
+      // })]);
+      if (data.value && check === 0) {
+        let temp = listAddress;
+        data.value.stores.forEach((val) => {
+          temp.push(val);
+        });
+        console.log("call func");
+        setListAddress(temp);
+        check++;
+        console.log(check);
+      }
+    };
     fetchBooks();
+    fetchAddress();
   }, []);
   //const books = useSelector((state) => state.book);
   const role =
     JSON.parse(window.localStorage.getItem("user")).roles[0] ===
     "ROLE_MANAGER_POST";
 
-  
   useEffect(() => {
     const fetchConfig = async () => {
       const { data } = await getConfig();
@@ -96,7 +115,7 @@ export default function AddPost() {
   } = useForm({
     resolver: yupResolver(schema),
   });
-  
+
   const submitForm = async (data, e) => {
     e.preventDefault();
     data.noDays = numDay;
@@ -107,44 +126,40 @@ export default function AddPost() {
     } else if (!role && address === "Chọn địa chỉ") {
       setErrorState({ address: "Bạn chưa chọn địa chỉ" });
     } else {
-      //let postDetails = listSelectBook.filter((lsb) => lsb.selected);
-      data.postDetailDtos = listChoosenBook.map((lsb) => {
-        return {
-          bookDto: {
-            id: lsb.id,
-          },
-          quantity: lsb.quantity,
-        };
-      });
-      if (role) {
-        data.address = null;
+      if (listChoosenBook.length > 0) {
+        data.postDetailDtos = listChoosenBook.map((lsb) => {
+          return {
+            bookDto: {
+              id: lsb.id,
+            },
+            quantity: lsb.quantity,
+          };
+        });
+        if (role) {
+          data.address = null;
+        } else {
+          data.address = address;
+          data.title = "[Ký gửi]";
+          data.fee = configs;
+        }
+        const res = await dispatch(
+          addPost({
+            title: data.title,
+            noDays: data.noDays,
+            fee: role ? data.fee : configs[0]?.value,
+            content: data.content,
+            address: data.address,
+            postDetailDtos: data.postDetailDtos,
+          })
+        );
+        if (res.success) {
+          NotificationManager.success(res.message, "Thông báo", 1000);
+          resetData();
+        } else {
+          NotificationManager.error(res.message, "Lỗi", 1000);
+        }
       } else {
-        data.address = address;
-        data.title = "[Ký gửi]";
-        data.fee = configs;
-      }
-      const res = await dispatch(
-        addPost({
-          title: data.title,
-          noDays: data.noDays,
-          fee: role ? data.fee : configs[0]?.value,
-          content: data.content,
-          address: data.address,
-          postDetailDtos: data.postDetailDtos,
-        })
-      );
-      if (res.success) {
-        NotificationManager.success(res.message, "Thông báo", 1000);
-        // setListSelectBook((prev) =>
-        //   prev.map((lsb) => {
-        //     return lsb.selected
-        //       ? { ...lsb, maxQuantity: lsb.maxQuantity - lsb.quantity }
-        //       : lsb;
-        //   })
-        // );
-        resetData();
-      } else {
-        NotificationManager.error(res.message, "Lỗi", 1000);
+        NotificationManager.error("Bạn chưa chọn sách để đăng", "Lỗi", 1000);
       }
     }
   };
@@ -158,7 +173,7 @@ export default function AddPost() {
     let tempSelect = listSelectBook;
     let tempChoose = listToChooseBook;
     listChoosenBook.forEach((lcb) => {
-      if(lcb.quantity !== lcb.maxQuantity){
+      if (lcb.quantity !== lcb.maxQuantity) {
         lcb.maxQuantity -= lcb.quantity;
         tempSelect.push(lcb);
         tempChoose.push(lcb);
@@ -199,8 +214,6 @@ export default function AddPost() {
     sumTotal();
   };
 
-  
-
   useEffect(() => {
     validateNoDay(numDay) === "" && sumTotal(listSelectBook);
   }, [numDay]);
@@ -218,12 +231,6 @@ export default function AddPost() {
       return "";
     }
   };
-  const listAddress = [
-    "Chọn địa chỉ",
-    "04 Tô Ngọc Vân, P. Linh Tây, Q. Thủ Đức, TP.HCM",
-    "138 Lê Văn Việt, P. Hiệp Phú, Q.9, TP.HCM",
-    "Số 190 Quang Trung, Phường 10, Quận Gò Vấp, TP.HCM",
-  ];
 
   const handleSearch = (e) => {
     setListToChooseBook(
@@ -243,7 +250,7 @@ export default function AddPost() {
     setListToChooseBook((prev) => [...prev, choosenBook]);
   };
 
-  return (
+  return listSelectBook ? (
     <section className="question-area pt-40px pb-40px">
       <NotificationContainer />
       <div className="container">
@@ -366,15 +373,17 @@ export default function AddPost() {
                         />
                       </div>
                     )}
-                    <div className="form-group col-md-3">
-                      <TextField
-                        id="filled-basic"
-                        label="Tổng giá"
-                        variant="filled"
-                        disabled
-                        value={total}
-                      />
-                    </div>
+                    {role && (
+                      <div className="form-group col-md-3">
+                        <TextField
+                          id="filled-basic"
+                          label="Tổng giá chưa phí"
+                          variant="filled"
+                          disabled
+                          value={total}
+                        />
+                      </div>
+                    )}
                   </div>
                   <div className="form-group">
                     <TextField
@@ -544,5 +553,7 @@ export default function AddPost() {
         </div>
       </div>
     </section>
+  ) : (
+    <Loading />
   );
 }
