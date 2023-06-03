@@ -16,7 +16,7 @@ export default function Member() {
             </h2>
             <p className="section-desc w-50 mx-auto" style={{ color: "#fff" }}>
               Cùng tham khảo những ưu đãi đặc biệt dành cho hội viên tại
-              Capstone
+              UCR
             </p>
           </div>
           <div className="row pt-50px">
