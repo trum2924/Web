@@ -38,6 +38,10 @@ export default function DetailPost() {
   const dispatch = useDispatch();
   const user = JSON.parse(window.localStorage.getItem("user"))?.roles[0];
 
+  useEffect(() => {
+    dispatch(getUser(JSON.parse(window.localStorage.getItem("user"))?.id));
+  }, []);
+
   const userInfo = useSelector((state) => state.user);
 
   const { id } = useParams();
