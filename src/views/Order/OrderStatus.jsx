@@ -48,24 +48,20 @@ export default function OrderStatus() {
     const fetchOrderStatus = async () => {
       const { data } = await getOrderStatus();
       setlistOrderStatus(
-        data.value
-          .sort((a, b) => b.id - a.id)
-          .map((val) => {
-            return {
-              ...val,
-              statusColor: getColorStatus(val.status),
-            };
-          })
+        data.value.map((val) => {
+          return {
+            ...val,
+            statusColor: getColorStatus(val.status),
+          };
+        })
       );
       setListOrderDisplay(
-        data.value
-          .sort((a, b) => b.id - a.id)
-          .map((val) => {
-            return {
-              ...val,
-              statusColor: getColorStatus(val.status),
-            };
-          })
+        data.value.map((val) => {
+          return {
+            ...val,
+            statusColor: getColorStatus(val.status),
+          };
+        })
       );
     };
     fetchOrderStatus();
@@ -98,7 +94,7 @@ export default function OrderStatus() {
   };
 
   const confirmDenyOrder = async () => {
-    const { data } = await denyOrder(denyId, { value: reason });
+    const { data } = await denyOrder(denyId, {value: reason});
     setOpenReason(false);
     if (data.success) {
       let temp = listOrderDisplay;
@@ -110,7 +106,7 @@ export default function OrderStatus() {
     } else {
       NotificationManager.error(data.message, "Lỗi", 1000);
     }
-  };
+  }
 
   const [listOrderDisplay, setListOrderDisplay] = useState([]);
 
@@ -161,7 +157,7 @@ export default function OrderStatus() {
       token: token,
       orderId: id,
       status: status,
-      userId: userid,
+      userId: userid
     };
     const input = JSON.stringify(data);
     setQrValue(input);
@@ -196,15 +192,13 @@ export default function OrderStatus() {
     let temp = listOrderStatus;
     temp = temp.filter((t) => t.postDto.title.indexOf(searchTitle) !== -1);
     temp = temp.filter((t) => t.userId.indexOf(searchUser) !== -1);
-    temp = temp.filter((t) =>
-      compareDate(t.borrowedDate, fromDate._d, rentDate._d)
-    );
+    temp = temp.filter(t => compareDate(t.borrowedDate, fromDate._d, rentDate._d));
     status !== -1 && (temp = temp.filter((t) => t.status === status));
     setListOrderDisplay(temp.slice());
   };
   const handleClickReset = () => {
     setRentDate(moment(new Date()));
-    setFromDate(moment(new Date(2020, 0, 1)));
+    setFromDate(moment(new Date(2020, 0 ,1)));
     setSearchTitle("");
     setSearchUser("");
     setStatus(-1);
@@ -362,7 +356,11 @@ export default function OrderStatus() {
                                       <button
                                         className="btn btn-success"
                                         onClick={(e) =>
-                                          handleConfirmOrder(e, los.id, index)
+                                          handleConfirmOrder(
+                                            e,
+                                            los.id,
+                                            index
+                                          )
                                         }
                                       >
                                         <FontAwesomeIcon icon={faCheck} /> Chấp
@@ -390,12 +388,7 @@ export default function OrderStatus() {
                                       <button
                                         className="btn btn-success"
                                         onClick={(e) =>
-                                          handleCreateQr(
-                                            e,
-                                            los.id,
-                                            los.status,
-                                            los.userId
-                                          )
+                                          handleCreateQr(e, los.id, los.status, los.userId)
                                         }
                                       >
                                         <FontAwesomeIcon icon={faQrcode} /> Tạo
@@ -414,12 +407,7 @@ export default function OrderStatus() {
                                       <button
                                         className="btn btn-success"
                                         onClick={(e) =>
-                                          handleCreateQr(
-                                            e,
-                                            los.id,
-                                            los.status,
-                                            los.userId
-                                          )
+                                          handleCreateQr(e, los.id, los.status, los.userId)
                                         }
                                       >
                                         <FontAwesomeIcon icon={faQrcode} /> Tạo
@@ -471,9 +459,9 @@ export default function OrderStatus() {
             <TextField
               margin="dense"
               value={reason}
-              onChange={(e) => setReason(e.target.value)}
+              onChange={e => setReason(e.target.value)}
               label="Lý do"
-            />
+             />
           </DialogContent>
           <DialogActions>
             <Button onClick={() => confirmDenyOrder()}>Xác nhận</Button>
